@@ -1,0 +1,33 @@
+config:
+  target: 'https://uv1ssvclql.execute-api.eu-central-1.amazonaws.com/dev'
+  phases:
+    - duration: 120
+      arrivalRate: 3
+  processor: "./loadTestFunction.js"
+scenarios:
+  - flow:
+      - function: "generateRandomData"
+      - post:
+          url: "/vote"
+          json:
+            cognitoid: "{{ userid }}"
+            voteid: "first_vote"
+            option: "{{ vote_1 }}"
+      - post:
+          url: "/vote"
+          json:
+            cognitoid: "{{ userid }}"
+            voteid: "second_vote"
+            option: "{{ vote_2 }}"
+      - post:
+          url: "/vote"
+          json:
+            cognitoid: "{{ userid }}"
+            voteid: "third_vote"
+            option: "{{ vote_3 }}"
+      - post:
+          url: "/vote"
+          json:
+            cognitoid: "{{ userid }}"
+            voteid: "fourth_vote"
+            option: "{{ vote_4 }}"

@@ -1,14 +1,13 @@
-# Welcome to your CDK TypeScript project!
+# High traffic Voting Backend
+This sample can be used as a baseline implementing Systems that can handle hundreds of thousand and even Millions of Requests/Vots per Second.
+The Spike will be absorbed and all Votes are written to a DynamoDB database. This can take longer than the vote is available. 
+So the System offers also intermediate Results in near Realtime. 
 
-This is a blank project for TypeScript development with CDK.
+## FAQs
+### Q: How can I contribute?
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+See the [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-## Useful commands
+## License
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file.
