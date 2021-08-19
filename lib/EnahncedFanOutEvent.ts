@@ -3,6 +3,7 @@ import * as lambda from '@aws-cdk/aws-lambda';
 import * as kinesis from '@aws-cdk/aws-kinesis';
 import * as iam from "@aws-cdk/aws-iam";
 import {Effect} from "@aws-cdk/aws-iam";
+import {Duration} from "@aws-cdk/core";
 
 export interface EnahncedFanOutEventProps {
     lambdaFunction: lambda.IFunction;
@@ -10,6 +11,7 @@ export interface EnahncedFanOutEventProps {
     batchSize?: number|undefined;
     parallelizationFactor?: number|undefined;
     startingPosition?: lambda.StartingPosition|undefined;
+    maxBatchingWindow?: Duration|undefined;
 }
 
 // Creates an EnhancedFanOut Reseiver and a Lambda Event Mapping for this
@@ -30,6 +32,7 @@ export class EnahncedFanOutEvent extends cdk.Construct {
             target: props.lambdaFunction,
             startingPosition: props.startingPosition,
             batchSize: props.batchSize,
+            maxBatchingWindow: props.maxBatchingWindow,
             parallelizationFactor: props.parallelizationFactor
         });
 

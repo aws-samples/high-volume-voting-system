@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { HighVolumeVotingSystemStack } from '../lib/high-volume-voting-system-stack';
+import { HighVolumeVotingSystemStack } from '../lib/HighVolumeVotingSystemStack';
 
 const app = new cdk.App();
 new HighVolumeVotingSystemStack(app, 'HighVolumeVotingSystemStack', {

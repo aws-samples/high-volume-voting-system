@@ -27,7 +27,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
 
     const votesStream = new kinesis.Stream(this, 'VotesStream', {
       retentionPeriod: Duration.days(1),
-      shardCount: 16
+      shardCount: 32
     });
 
     const voteCounter = new lambda.Function(this, 'votesCounterFunction', {
@@ -43,6 +43,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset('lambda'),
       handler: 'intermediateVotes.handler',
+      memorySize: 512,
       environment: {
         VOTE_TABLE_NAME: intermediateResultTable.tableName
       }
@@ -52,16 +53,17 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
       kinesisStream: votesStream,
       lambdaFunction: voteCounter,
       startingPosition: StartingPosition.LATEST,
-      batchSize: 25,
-      parallelizationFactor: 10
+      batchSize: 10,
+      parallelizationFactor: 1
     });
 
     new EnahncedFanOutEvent(this, 'intermediateResults', {
       kinesisStream: votesStream,
       lambdaFunction: intermediateResults,
       startingPosition: StartingPosition.LATEST,
-      batchSize: 1000,
-      parallelizationFactor: 10,
+      batchSize: 10000,
+      parallelizationFactor: 1,
+      maxBatchingWindow: Duration.seconds(5)
     });
 
     const credentialsRole = new iam.Role(this, "Role", {
@@ -71,7 +73,9 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
     const api = new apigw.RestApi(this, 'RestVotingEndpoint', {
       deployOptions: {
         stageName: 'dev',
-        tracingEnabled: true
+        tracingEnabled: true,
+        throttlingRateLimit: 0,
+        throttlingBurstLimit: 0
       }
     });
 
@@ -84,6 +88,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
         integrationHttpMethod: 'POST',
         options: {
           credentialsRole: credentialsRole,
+          timeout: Duration.seconds(2),
           integrationResponses: [
             {
               statusCode: '200'
@@ -101,6 +106,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
         {
           methodResponses: [{statusCode: '200'}]
         }
+
     );
 
     votesStream.grantWrite(credentialsRole);

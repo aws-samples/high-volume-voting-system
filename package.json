@@ -2,7 +2,7 @@
   "name": "high-volume-voting-system",
   "version": "0.1.0",
   "bin": {
-    "high-volume-voting-system": "bin/high-volume-voting-system.js"
+    "high-volume-voting-system": "bin/HighVolumeVotingSystem.js"
   },
   "scripts": {
     "build": "tsc",
