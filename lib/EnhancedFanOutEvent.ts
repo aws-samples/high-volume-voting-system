@@ -15,7 +15,7 @@ export interface EnahncedFanOutEventProps {
 }
 
 // Creates an EnhancedFanOut Reseiver and a Lambda Event Mapping for this
-export class EnahncedFanOutEvent extends cdk.Construct {
+export class EnhancedFanOutEvent extends cdk.Construct {
 
     public readonly handler: lambda.Function;
 
@@ -33,7 +33,8 @@ export class EnahncedFanOutEvent extends cdk.Construct {
             startingPosition: props.startingPosition,
             batchSize: props.batchSize,
             maxBatchingWindow: props.maxBatchingWindow,
-            parallelizationFactor: props.parallelizationFactor
+            parallelizationFactor: props.parallelizationFactor,
+
         });
 
         props.lambdaFunction.addToRolePolicy(new iam.PolicyStatement({

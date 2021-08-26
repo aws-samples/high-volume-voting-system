@@ -6,7 +6,7 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as kinesis from '@aws-cdk/aws-kinesis';
 import * as lambda from '@aws-cdk/aws-lambda';
 import {StartingPosition} from '@aws-cdk/aws-lambda';
-import {EnahncedFanOutEvent} from "./EnahncedFanOutEvent";
+import {EnhancedFanOutEvent} from "./EnhancedFanOutEvent";
 
 
 export class HighVolumeVotingSystemStack extends cdk.Stack {
@@ -27,7 +27,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
 
     const votesStream = new kinesis.Stream(this, 'VotesStream', {
       retentionPeriod: Duration.days(1),
-      shardCount: 32
+      shardCount: 64
     });
 
     const voteCounter = new lambda.Function(this, 'votesCounterFunction', {
@@ -49,7 +49,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
       }
     });
 
-    new EnahncedFanOutEvent(this, 'votesCounter', {
+    new EnhancedFanOutEvent(this, 'votesCounter', {
       kinesisStream: votesStream,
       lambdaFunction: voteCounter,
       startingPosition: StartingPosition.LATEST,
@@ -57,7 +57,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
       parallelizationFactor: 1
     });
 
-    new EnahncedFanOutEvent(this, 'intermediateResults', {
+    new EnhancedFanOutEvent(this, 'intermediateResults', {
       kinesisStream: votesStream,
       lambdaFunction: intermediateResults,
       startingPosition: StartingPosition.LATEST,
