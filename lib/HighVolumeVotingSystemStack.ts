@@ -27,7 +27,7 @@ export class HighVolumeVotingSystemStack extends cdk.Stack {
 
     const votesStream = new kinesis.Stream(this, 'VotesStream', {
       retentionPeriod: Duration.days(1),
-      shardCount: 64
+      shardCount: 1
     });
 
     const voteCounter = new lambda.Function(this, 'votesCounterFunction', {
